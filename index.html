@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Mercer — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS Custom Properties ─── */
+    :root {
+      --bg:         #0e0e10;
+      --bg-card:    #16161a;
+      --bg-subtle:  #1c1c22;
+      --border:     #2a2a35;
+      --accent:     #d4f57a;
+      --accent-dim: #a8c460;
+      --text:       #f0eeea;
+      --text-muted: #888897;
+      --text-faint: #52525e;
+      --serif:      'DM Serif Display', Georgia, serif;
+      --sans:       'DM Sans', system-ui, sans-serif;
+      --radius:     12px;
+      --radius-sm:  6px;
+    }
+
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Noise Texture Overlay ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 3rem;
+      border-bottom: 1px solid transparent;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(14,14,16,0.92);
+      backdrop-filter: blur(16px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      font-size: 0.875rem;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── Hero ─── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 8rem 3rem 5rem;
+      position: relative;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,245,122,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -55%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 800px; text-align: center; position: relative; }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(212,245,122,0.08);
+      border: 1px solid rgba(212,245,122,0.2);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      margin-bottom: 2rem;
+    }
+    .hero-tag::before { content: '●'; font-size: 0.5rem; }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 2rem;
+      background: var(--accent);
+      color: #0e0e10;
+      border-radius: 999px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: #c8ef60; transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 2rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); color: var(--text); transform: translateY(-1px); }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-faint);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint svg { width: 16px; height: 16px; }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ─── Section Shared ─── */
+    section { padding: 6rem 3rem; }
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--text-faint);
+    }
+    .section-heading {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+    }
+
+    /* ─── About ─── */
+    #about { max-width: 1100px; margin: 0 auto; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+      font-weight: 300;
+    }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .skill-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.9rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .skill-chip:hover { border-color: var(--accent); color: var(--accent); }
+    .skill-chip::before { content: '◆'; color: var(--accent); font-size: 0.5rem; }
+    .stats-row {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat-item h3 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-item p { font-size: 0.8rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ─── Projects ─── */
+    #projects { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .projects-inner { max-width: 1100px; margin: 0 auto; }
+    .project-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .filter-btn {
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0e0e10;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.25s, transform 0.2s;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .project-card.hidden { display: none; }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      background: rgba(212,245,122,0.1);
+      border: 1px solid rgba(212,245,122,0.2);
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+    }
+    .card-links { display: flex; gap: 0.5rem; }
+    .card-link {
+      display: grid;
+      place-items: center;
+      width: 32px; height: 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-faint);
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .card-link:hover { border-color: var(--accent); color: var(--accent); }
+    .card-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(212,245,122,0.08);
+      border: 1px solid rgba(212,245,122,0.15);
+      border-radius: 999px;
+      padding: 0.2rem 0.7rem;
+      align-self: flex-start;
+    }
+    .card-title { font-family: var(--serif); font-size: 1.35rem; line-height: 1.2; }
+    .card-desc { font-size: 0.9rem; color: var(--text-muted); font-weight: 300; flex: 1; }
+    .card-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+    .stack-pill {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-faint);
+    }
+
+    /* ─── Contact ─── */
+    #contact { max-width: 1100px; margin: 0 auto; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .contact-info p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+    .contact-link-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link-item:hover { border-color: var(--accent); color: var(--accent); }
+    .contact-link-item .link-icon { font-size: 1rem; min-width: 20px; text-align: center; }
+
+    /* ─── Contact Form ─── */
+    .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label {
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--text-faint); }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--accent); }
+    .form-group input.error,
+    .form-group textarea.error { border-color: #e2534a; }
+    .form-group select option { background: var(--bg-subtle); }
+    .error-msg {
+      font-size: 0.78rem;
+      color: #e2534a;
+      display: none;
+      margin-top: 0.1rem;
+    }
+    .error-msg.visible { display: block; }
+    .form-hint {
+      font-size: 0.8rem;
+      color: var(--text-faint);
+      margin-top: -0.5rem;
+    }
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2.25rem;
+      background: var(--accent);
+      color: #0e0e10;
+      border: none;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .submit-btn:hover { background: #c8ef60; transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .form-success {
+      display: none;
+      padding: 1rem 1.25rem;
+      background: rgba(212,245,122,0.08);
+      border: 1px solid rgba(212,245,122,0.25);
+      border-radius: var(--radius-sm);
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+    .form-success.visible { display: block; }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+    }
+    footer p { font-size: 0.8rem; color: var(--text-faint); }
+    footer a { color: var(--text-muted); transition: color 0.2s; }
+    footer a:hover { color: var(--accent); }
+
+    /* ─── Fade-in Animation ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navigation ─── -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="#hero" class="nav-logo">Alex<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Hire me →</a>
+  </nav>
+
+  <!-- ─── Hero Section ─── -->
+  <section id="hero" aria-label="Introduction">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <div class="hero-tag">Available for freelance work</div>
+      <h1>Crafting <em>digital</em><br />experiences.</h1>
+      <p class="hero-sub">
+        Full-stack developer & UI designer focused on performant, accessible,
+        and genuinely beautiful software.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">View my work ↓</a>
+        <a href="#contact" class="btn-secondary">Get in touch</a>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 3v10M3 8l5 5 5-5"/>
+      </svg>
+      scroll
+    </div>
+  </section>
+
+  <!-- ─── About Section ─── -->
+  <section id="about">
+    <div class="fade-in">
+      <div class="section-label">Who I am</div>
+      <h2 class="section-heading">Building with<br />purpose &amp; precision.</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            I'm <strong>Alex Mercer</strong>, a full-stack developer with 5+ years of experience
+            building products that live at the intersection of <strong>engineering and design</strong>.
+          </p>
+          <p>
+            My workflow leverages modern AI tooling — including <strong>GitHub Copilot</strong> —
+            to move faster without sacrificing quality. I believe that great code is readable, 
+            maintainable, and purposefully documented.
+          </p>
+          <p>
+            When I'm not shipping features, I'm contributing to open-source,
+            writing about web performance, or exploring generative art.
+          </p>
+          <div class="stats-row">
+            <div class="stat-item"><h3>5+</h3><p>Years experience</p></div>
+            <div class="stat-item"><h3>40+</h3><p>Projects shipped</p></div>
+            <div class="stat-item"><h3>12+</h3><p>Happy clients</p></div>
+          </div>
+        </div>
+        <div>
+          <div class="skills-grid" id="skills-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Projects Section ─── -->
+  <section id="projects">
+    <div class="projects-inner fade-in">
+      <div class="section-label">What I've built</div>
+      <h2 class="section-heading">Project gallery.</h2>
+      <div class="project-filters" id="filters" role="group" aria-label="Filter projects by category">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <!-- Filter buttons populated by JS -->
+      </div>
+      <div class="projects-grid" id="projects-grid">
+        <!-- Project cards populated by JS from JSON data -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Contact Section ─── -->
+  <section id="contact">
+    <div class="fade-in">
+      <div class="section-label">Get in touch</div>
+      <h2 class="section-heading">Let's work<br />together.</h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p>
+            Have a project in mind or just want to chat? I'm always open to
+            discussing new opportunities, creative ideas, or ways I can help.
+          </p>
+          <div class="contact-links">
+            <a href="mailto:alex@example.com" class="contact-link-item">
+              <span class="link-icon">✉</span>
+              <span>alex@example.com</span>
+            </a>
+            <a href="https://github.com" class="contact-link-item" target="_blank" rel="noopener">
+              <span class="link-icon">⬡</span>
+              <span>github.com/alexmercer</span>
+            </a>
+            <a href="https://linkedin.com" class="contact-link-item" target="_blank" rel="noopener">
+              <span class="link-icon">in</span>
+              <span>linkedin.com/in/alexmercer</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact form with Copilot-assisted validation -->
+        <form class="contact-form" id="contactForm" novalidate aria-label="Contact form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name *</label>
+              <input type="text" id="name" name="name" placeholder="Jane Smith" autocomplete="name" />
+              <span class="error-msg" id="nameError" role="alert">Please enter your full name.</span>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" autocomplete="tel" />
+              <span class="form-hint" id="phoneHint">Auto-formatted as (XXX) XXX-XXXX</span>
+              <span class="error-msg" id="phoneError" role="alert">Enter a valid 10-digit US phone number.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address *</label>
+            <input type="email" id="email" name="email" placeholder="jane@company.com" autocomplete="email" />
+            <span class="error-msg" id="emailError" role="alert">Please enter a valid email address.</span>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject *</label>
+            <select id="subject" name="subject">
+              <option value="">Select a topic…</option>
+              <option value="freelance">Freelance project</option>
+              <option value="fulltime">Full-time opportunity</option>
+              <option value="collab">Collaboration</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="error-msg" id="subjectError" role="alert">Please choose a subject.</span>
+          </div>
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me about your project…"></textarea>
+            <span class="error-msg" id="messageError" role="alert">Message must be at least 20 characters.</span>
+          </div>
+          <div class="form-success" id="formSuccess" role="status">
+            ✓ Message sent! I'll get back to you within 24 hours.
+          </div>
+          <button type="submit" class="submit-btn" id="submitBtn">
+            Send message →
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer>
+    <p>© 2025 Alex Mercer. Built with care &amp; GitHub Copilot.</p>
+    <p>
+      <a href="#hero">Back to top ↑</a>
+    </p>
+  </footer>
+
+  <script>
+    /**
+     * ─────────────────────────────────────────────────────────────
+     *  PROJECT DATA  (JSON-driven content, Copilot-generated schema)
+     * ─────────────────────────────────────────────────────────────
+     * @type {Array<{id:number, title:string, description:string,
+     *   category:string, stack:string[], icon:string,
+     *   liveUrl:string, repoUrl:string}>}
+     */
+    const PROJECTS = [
+      {
+        id: 1,
+        title: "SpendSmart Dashboard",
+        description: "Real-time personal finance tracker with predictive spend analysis and customisable budget categories.",
+        category: "App",
+        stack: ["React", "TypeScript", "Recharts", "Supabase"],
+        icon: "💰",
+        liveUrl: "#",
+        repoUrl: "#"
+      },
+      {
+        id: 2,
+        title: "Orbit Design System",
+        description: "Component library and token-based design system used across three SaaS products, with Storybook docs.",
+        category: "Library",
+        stack: ["React", "Styled Components", "Storybook", "Rollup"],
+        icon: "🪐",
+        liveUrl: "#",
+        repoUrl: "#"
+      },
+      {
+        id: 3,
+        title: "PulseAPI",
+        description: "REST API for real-time health-metric ingestion with rate limiting, webhooks, and OpenAPI spec.",
+        category: "Backend",
+        stack: ["Node.js", "Fastify", "PostgreSQL", "Redis"],
+        icon: "⚡",
+        liveUrl: "#",
+        repoUrl: "#"
+      },
+      {
+        id: 4,
+        title: "Folio CMS",
+        description: "Headless CMS for portfolios and micro-blogs with a markdown editor and GitHub-based media storage.",
+        category: "App",
+        stack: ["Next.js", "MDX", "Prisma", "Vercel"],
+        icon: "📝",
+        liveUrl: "#",
+        repoUrl: "#"
+      },
+      {
+        id: 5,
+        title: "SkyLines Maps",
+        description: "Interactive map explorer for hiking trails using vector tiles, elevation profiles, and offline caching.",
+        category: "Web",
+        stack: ["MapLibre GL", "React", "Service Workers", "Go"],
+        icon: "🗺️",
+        liveUrl: "#",
+        repoUrl: "#"
+      },
+      {
+        id: 6,
+        title: "Chorus CLI",
+        description: "Terminal utility that scaffolds opinionated monorepo structures with CI/CD templates and git hooks.",
+        category: "Library",
+        stack: ["Node.js", "Inquirer", "Chalk", "pnpm"],
+        icon: "🎵",
+        liveUrl: "#",
+        repoUrl: "#"
+      }
+    ];
+
+    /** Skills data for About section */
+    const SKILLS = [
+      "JavaScript / TypeScript", "React & Next.js",
+      "Node.js / Fastify",      "PostgreSQL / Redis",
+      "CSS & Design Systems",   "GitHub Copilot",
+      "CI/CD & DevOps",         "Web Performance"
+    ];
+
+    /* ─────────────────────────────────────────────────────────────
+     *  UTILITY FUNCTIONS  (Copilot-assisted helpers)
+     * ───────────────────────────────────────────────────────────── */
+
+    /**
+     * Validates an email address against RFC-5322-compatible regex.
+     * @param {string} email - The email string to test.
+     * @returns {boolean} True if the email format is valid.
+     */
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return re.test(String(email).trim().toLowerCase());
+    }
+
+    /**
+     * Validates a US phone number (10 digits, ignoring formatting chars).
+     * @param {string} phone - Raw phone input from the user.
+     * @returns {boolean} True if exactly 10 digits are present.
+     */
+    function validatePhone(phone) {
+      const digits = phone.replace(/\D/g, '');
+      return digits.length === 10;
+    }
+
+    /**
+     * Formats a raw digit string into (XXX) XXX-XXXX US phone format.
+     * Called on every keyup event so the field formats in real time.
+     * @param {string} raw - The unformatted input string.
+     * @returns {string} The formatted phone string, up to 14 chars.
+     */
+    function formatPhoneNumber(raw) {
+      // Strip all non-numeric characters
+      const digits = raw.replace(/\D/g, '').slice(0, 10);
+      const len = digits.length;
+      if (len === 0) return '';
+      if (len <= 3) return `(${digits}`;
+      if (len <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+      return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+    }
+
+    /**
+     * Validates that a message string meets the minimum length requirement.
+     * @param {string} msg  - The message body to check.
+     * @param {number} [min=20] - Minimum character count (default 20).
+     * @returns {boolean} True if the message meets the minimum length.
+     */
+    function validateMessage(msg, min = 20) {
+      return msg.trim().length >= min;
+    }
+
+    /**
+     * Shows or hides a validation error for a given input element.
+     * @param {HTMLInputElement} inputEl  - The form field element.
+     * @param {HTMLElement}      errorEl  - The associated error message element.
+     * @param {boolean}          isValid  - Whether the field value is valid.
+     */
+    function setFieldValidity(inputEl, errorEl, isValid) {
+      if (isValid) {
+        inputEl.classList.remove('error');
+        errorEl.classList.remove('visible');
+      } else {
+        inputEl.classList.add('error');
+        errorEl.classList.add('visible');
+      }
+    }
+
+    /**
+     * Extracts unique categories from the projects array for filter buttons.
+     * @param {typeof PROJECTS} projects - The full project dataset.
+     * @returns {string[]} Sorted unique category strings.
+     */
+    function getCategories(projects) {
+      return [...new Set(projects.map(p => p.category))].sort();
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+     *  RENDER FUNCTIONS
+     * ───────────────────────────────────────────────────────────── */
+
+    /**
+     * Renders skill chips into the About skills grid.
+     * @param {string[]} skills - Array of skill label strings.
+     */
+    function renderSkills(skills) {
+      const grid = document.getElementById('skills-grid');
+      if (!grid) return;
+      grid.innerHTML = skills
+        .map(s => `<div class="skill-chip">${s}</div>`)
+        .join('');
+    }
+
+    /**
+     * Renders filter buttons from unique project categories.
+     * "All" button is always first and pre-selected.
+     * @param {string[]} categories - Unique category names.
+     */
+    function renderFilters(categories) {
+      const container = document.getElementById('filters');
+      if (!container) return;
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.dataset.filter = cat;
+        btn.textContent = cat;
+        btn.setAttribute('aria-label', `Filter by ${cat}`);
+        container.appendChild(btn);
+      });
+    }
+
+    /**
+     * Renders project cards from the JSON data array.
+     * Each card shows the icon, title, description, tech stack, and links.
+     * @param {typeof PROJECTS} projects - Filtered or full project list.
+     */
+    function renderProjects(projects) {
+      const grid = document.getElementById('projects-grid');
+      if (!grid) return;
+      // Re-show all then hide filtered-out cards
+      document.querySelectorAll('.project-card').forEach(c => c.classList.add('hidden'));
+      grid.innerHTML = projects.map(p => `
+        <article class="project-card fade-in" data-category="${p.category}" aria-label="${p.title}">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">${p.icon}</div>
+            <div class="card-links">
+              <a href="${p.repoUrl}" class="card-link" title="View source" target="_blank" rel="noopener" aria-label="View ${p.title} source code">⌥</a>
+              <a href="${p.liveUrl}" class="card-link" title="Live demo" target="_blank" rel="noopener" aria-label="View ${p.title} live demo">↗</a>
+            </div>
+          </div>
+          <span class="card-tag">${p.category}</span>
+          <h3 class="card-title">${p.title}</h3>
+          <p class="card-desc">${p.description}</p>
+          <div class="card-stack">
+            ${p.stack.map(t => `<span class="stack-pill">${t}</span>`).join('')}
+          </div>
+        </article>
+      `).join('');
+
+      // Stagger the new cards' fade-in
+      grid.querySelectorAll('.project-card').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 80);
+      });
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+     *  FILTER LOGIC
+     * ───────────────────────────────────────────────────────────── */
+
+    /**
+     * Handles filter button clicks; re-renders projects for the chosen category.
+     * @param {MouseEvent} e - Click event from the filters container.
+     */
+    function handleFilter(e) {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      // Update active state
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      const filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
+      renderProjects(filtered);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+     *  FORM VALIDATION & SUBMISSION
+     * ───────────────────────────────────────────────────────────── */
+
+    /** Cache form field elements for reuse */
+    const fields = {
+      name:    document.getElementById('name'),
+      phone:   document.getElementById('phone'),
+      email:   document.getElementById('email'),
+      subject: document.getElementById('subject'),
+      message: document.getElementById('message'),
+    };
+    const errors = {
+      name:    document.getElementById('nameError'),
+      phone:   document.getElementById('phoneError'),
+      email:   document.getElementById('emailError'),
+      subject: document.getElementById('subjectError'),
+      message: document.getElementById('messageError'),
+    };
+
+    /**
+     * Real-time phone number formatting on every keystroke.
+     * Updates the input value in place with (XXX) XXX-XXXX format.
+     */
+    fields.phone.addEventListener('input', function () {
+      const cursor = this.selectionStart;
+      const formatted = formatPhoneNumber(this.value);
+      this.value = formatted;
+      // Restore caret position approximately
+      this.setSelectionRange(cursor, cursor);
+      // Live-validate only if field is non-empty
+      if (this.value.length > 0) {
+        setFieldValidity(this, errors.phone, validatePhone(this.value));
+      } else {
+        setFieldValidity(this, errors.phone, true); // phone is optional
+      }
+    });
+
+    /**
+     * Validates the entire contact form on submit.
+     * Prevents submission and shows inline errors for any invalid fields.
+     * On success, shows a confirmation message and resets the form.
+     * @param {SubmitEvent} e - The form submit event.
+     */
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      let valid = true;
+
+      // ── Name validation
+      const nameOk = fields.name.value.trim().length >= 2;
+      setFieldValidity(fields.name, errors.name, nameOk);
+      if (!nameOk) valid = false;
+
+      // ── Phone validation (optional field)
+      const phoneVal = fields.phone.value.trim();
+      const phoneOk = phoneVal === '' || validatePhone(phoneVal);
+      setFieldValidity(fields.phone, errors.phone, phoneOk);
+      if (!phoneOk) valid = false;
+
+      // ── Email validation
+      const emailOk = validateEmail(fields.email.value);
+      setFieldValidity(fields.email, errors.email, emailOk);
+      if (!emailOk) valid = false;
+
+      // ── Subject validation
+      const subjectOk = fields.subject.value !== '';
+      setFieldValidity(fields.subject, errors.subject, subjectOk);
+      if (!subjectOk) valid = false;
+
+      // ── Message validation
+      const messageOk = validateMessage(fields.message.value);
+      setFieldValidity(fields.message, errors.message, messageOk);
+      if (!messageOk) valid = false;
+
+      if (!valid) return;
+
+      // ── Simulate async submission
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      setTimeout(() => {
+        document.getElementById('formSuccess').classList.add('visible');
+        this.reset();
+        btn.disabled = false;
+        btn.textContent = 'Send message →';
+      }, 1200);
+    });
+
+    /* ─────────────────────────────────────────────────────────────
+     *  SCROLL EFFECTS
+     * ───────────────────────────────────────────────────────────── */
+
+    /**
+     * Adds .scrolled class to navbar once user scrolls past 60px,
+     * which triggers a frosted-glass background via CSS.
+     */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    /**
+     * IntersectionObserver to trigger CSS fade-in animations
+     * as each section or card enters the viewport.
+     */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    /* ─────────────────────────────────────────────────────────────
+     *  INITIALISE
+     * ───────────────────────────────────────────────────────────── */
+
+    /**
+     * Boot sequence: render skills, populate filter buttons,
+     * and load the full project grid from JSON data.
+     */
+    (function init() {
+      renderSkills(SKILLS);
+      renderFilters(getCategories(PROJECTS));
+      renderProjects(PROJECTS);
+      document.getElementById('filters').addEventListener('click', handleFilter);
+    })();
+  </script>
+</body>
+</html>
